@@ -1,0 +1,55 @@
+
+<?php
+
+session_start();
+require_once "pdo.php";
+if(isset($_POST['Logout'])){
+	header("Location:logout.php");
+}
+
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome</title>
+</head>
+<body id="loginpagebody">
+<div class="container">
+    <h1 id="loginheadingortitle">Info</h1>
+    <form method="POST" action="logout.php">
+        <input type="submit" name="cancel" value="Cancel" id="logininput">
+    </form>
+    
+</div>
+</body>
+</html>
+
+<?php
+
+if (isset($_SESSION['pwd']) && isset($_SESSION['name']) && isset($_SESSION['college'])) {
+
+	echo($_SESSION['type']);
+	#header("Location:index2.php");
+
+    $stmt = $pdo->prepare('SELECT * FROM apt WHERE college = :u');
+
+    $stmt->execute(array(':u' => $_SESSION['college']));
+
+
+    while($row = $stmt->fetch(PDO::FETCH_ASSOC))
+    {
+    	
+    	echo("</td>".$row['name']."</td>".$row['apartment']."</td>".$row['info']);
+    }
+
+    
+    
+
+// Fall through into the View
+}
+else{
+
+	header("Location: login.php");
+}
+
+?>
